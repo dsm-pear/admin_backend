@@ -1,8 +1,6 @@
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
-
-from Pear_Admin.utils import CommentPagination
 from User.models import AdminTbl
 from User.services import JWTService
 from .serializers import DetailSerializer, ListSerializer, CommentSerializer
@@ -10,7 +8,6 @@ from .models import ReportTbl, CommentTbl
 
 
 class RequestViewSet(viewsets.ModelViewSet):
-    pagination_class = CommentPagination
 
     def get_serializer_class(self):
         """Return appropriate serializer class"""

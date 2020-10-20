@@ -1,7 +1,6 @@
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
-from Pear_Admin.utils import NoticePagination
 from User.models import AdminTbl
 from User.services import JWTService
 from .serializers import NoticeSerializer
@@ -10,7 +9,6 @@ from .models import NoticeTbl
 
 class NoticeViewSet(viewsets.ModelViewSet):
     serializer_class = NoticeSerializer
-    pagination_class = NoticePagination
 
     def get_queryset(self, *args, **kwargs):
         pk = JWTService.run_auth_process(self.request.headers)
