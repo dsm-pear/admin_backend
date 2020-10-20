@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'User',
+    'Notice',
+    'Question',
+    'Report',
 ]
 
 MIDDLEWARE = [
@@ -134,6 +137,6 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'User.AdminTbl'
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
+    'DEFAULT_PAGINATION_CLASS': 'Pear_Admin.utils.StandardPagination',
+    'PAGE_SIZE': 10
 }
