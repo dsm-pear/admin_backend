@@ -1,0 +1,7 @@
+language: python # 언어 설정
+python:
+    - "3.7" # 버전 설정
+install: "pip install -r requirements.txt" # dependencies 설정
+script: python manage.py test --keepdb && flake8 # 실행할 스크립트
+#notifications: # 슬랙 알림
+#    slack: <user>:<token>
