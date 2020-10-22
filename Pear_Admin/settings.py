@@ -82,6 +82,7 @@ WSGI_APPLICATION = 'Pear_Admin.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -134,7 +135,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-AUTH_USER_MODEL = 'User.AdminTbl'
+# AUTH_USER_MODEL = 'User.AdminTbl'
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'Pear_Admin.utils.StandardPagination',

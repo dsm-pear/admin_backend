@@ -23,7 +23,8 @@ class RequestViewSet(viewsets.ModelViewSet):
         if len(AdminTbl.objects.filter(id=pk).values()):
             queryset = ReportTbl.objects.filter(is_accepted=0)
             return queryset
-        Response({"message": "User didn't exist."}, status=status.HTTP_400_BAD_REQUEST)
+        Response({"message": "User didn't exist."},
+                 status=status.HTTP_400_BAD_REQUEST)
 
 
 class ListViewSet(viewsets.ModelViewSet):
@@ -42,7 +43,8 @@ class ListViewSet(viewsets.ModelViewSet):
         if len(AdminTbl.objects.filter(id=pk).values()):
             queryset = ReportTbl.objects.filter(is_accepted=0)
             return queryset
-        Response({"message": "User didn't exist."}, status=status.HTTP_400_BAD_REQUEST)
+        Response({"message": "User didn't exist."},
+                 status=status.HTTP_400_BAD_REQUEST)
 
 
 class CommentViewSet(viewsets.ModelViewSet):

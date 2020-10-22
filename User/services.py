@@ -14,18 +14,23 @@ from Pear_Admin.hidden import JWT_SECRET_KEY
 class HashService(object):
     @staticmethod
     def hash_string_to_password(password: str) -> str:
-        return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())\
+            .decode('utf-8')
 
     @staticmethod
     def compare_pw_and_hash(password: str, hashed: str) -> bool:
         return bcrypt.checkpw(password.encode('utf-8'), hashed.encode('utf-8'))
 
+
 class JWTService(object):
     @staticmethod
-    def run_auth_process(headers: dict, token_type: str = 'access'):
+    def run_auth_process(headers: dict,
+                         token_type: str = 'access'):
         try:
             JWTService.check_header_include(headers, 'Authorization')
-            pk = JWTService.decode_access_token_to_id(headers['Authorization'], token_type)
+            pk = JWTService.decode_access_token_to_id(
+                headers['Authorization'],
+                token_type)
         except KeyError:
             raise NoIncludeJWT
         except jwt.exceptions.InvalidSignatureError:
@@ -40,11 +45,12 @@ class JWTService(object):
 
     @staticmethod
     def check_header_include(headers: dict, key: str) -> None:
-        if (key not in headers) or (headers['Authorization'] is ''):
+        if (key != headers) or (headers['Authorization'] == ''):
             raise KeyError
 
     @staticmethod
-    def create_access_token_with_id(user_id: int, expired_minute: int = 60) -> str:
+    def create_access_token_with_id(user_id: int,
+                                    expired_minute: int = 5) -> str:
         return jwt.encode({
             'id': user_id,
             'exp': datetime.utcnow()+timedelta(minutes=expired_minute)
@@ -53,10 +59,11 @@ class JWTService(object):
         })
 
     @staticmethod
-    def create_refresh_token_with_id(user_id: int, expired_minute: int = 60*24):
+    def create_refresh_token_with_id(user_id: int,
+                                     expired_days: int = 14):
         return jwt.encode({
             'id': user_id,
-            'exp': datetime.utcnow()+timedelta(minutes=expired_minute)
+            'exp': datetime.utcnow()+timedelta(days=expired_days)
         }, JWT_SECRET_KEY, algorithm='HS256', headers={
             'token': 'refresh'
         })
@@ -65,4 +72,6 @@ class JWTService(object):
     def decode_access_token_to_id(access_token: str, token_type):
         if not token_type == jwt.get_unverified_header(access_token)['token']:
             raise jwt.exceptions.InvalidSignatureError
-        return jwt.decode(access_token, JWT_SECRET_KEY, algorithms=['HS256'])['id']
+        return jwt.decode(access_token,
+                          JWT_SECRET_KEY,
+                          algorithms=['HS256'])['id']

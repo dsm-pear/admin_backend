@@ -1,3 +1,4 @@
+Pear_Admin/hidden.py
 *.pyc
 *~
 venv

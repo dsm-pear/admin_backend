@@ -15,8 +15,8 @@ class NoticeViewSet(viewsets.ModelViewSet):
         if len(AdminTbl.objects.filter(id=pk).values()):
             queryset = QuestionTbl.objects.all()
             return queryset
-        Response({"message": "User didn't exist."}, status=status.HTTP_400_BAD_REQUEST)
-
+        Response({"message": "User didn't exist."},
+                 status=status.HTTP_400_BAD_REQUEST)
 
 
 questions = NoticeViewSet.as_view({
