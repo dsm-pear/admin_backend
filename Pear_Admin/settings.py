@@ -135,7 +135,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# AUTH_USER_MODEL = 'User.AdminTbl'
+AUTH_USER_MODEL = 'User.AdminTbl'
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'Pear_Admin.utils.StandardPagination',

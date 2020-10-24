@@ -13,7 +13,7 @@ class NoticeViewSet(viewsets.ModelViewSet):
     def get_queryset(self, *args, **kwargs):
         pk = JWTService.run_auth_process(self.request.headers)
         if len(AdminTbl.objects.filter(id=pk).values()):
-            queryset = QuestionTbl.objects.all()
+            queryset = QuestionTbl.objects.get_queryset().order_by('id')
             return queryset
         Response({"message": "User didn't exist."},
                  status=status.HTTP_400_BAD_REQUEST)
