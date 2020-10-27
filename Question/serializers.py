@@ -6,4 +6,4 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = QuestionTbl
-        fields = ('user', 'email', 'description')
+        fields = ('id', 'email', 'description')

@@ -11,6 +11,6 @@ class NoticeTbl(models.Model):
     path = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
+        ordering = ["-id"]
         managed = False
         db_table = 'notice_tbl'
-        ordering = ["-created_at"]

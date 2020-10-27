@@ -41,10 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'User',
-    'Notice',
-    'Question',
-    'Report',
+    'User.apps.UserConfig',
+    'Notice.apps.NoticeConfig',
+    'Question.apps.QuestionConfig',
+    'Report.apps.ReportConfig',
 ]
 
 MIDDLEWARE = [
@@ -135,7 +135,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# AUTH_USER_MODEL = 'User.AdminTbl'
+AUTH_USER_MODEL = 'User.AdminTbl'
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'Pear_Admin.utils.StandardPagination',

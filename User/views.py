@@ -14,15 +14,15 @@ def createUser(request):
     if request.method == 'POST':
         serializer = UserCreateSerializer(data=request.data)
         if not serializer.is_valid(raise_exception=True):
-            return Response({"message": "Request Body Error."},
+            return Response({"detail": "Request Body Error."},
                             status=status.HTTP_409_CONFLICT)
 
         if AdminTbl.objects.filter(
                 email=serializer.validated_data['email']).first() is None:
             serializer.save()
-            return Response({"message": "ok"},
+            return Response({"detail": "ok"},
                             status=status.HTTP_201_CREATED)
-        return Response({"message": "duplicate email"},
+        return Response({"detail": "duplicate email"},
                         status=status.HTTP_409_CONFLICT)
 
 
@@ -30,7 +30,7 @@ def createUser(request):
 def login(request):
     serializer = LoginSerializer(data=request.data)
     if not serializer.is_valid(raise_exception=True):
-        return Response({"message": "Request Body Error."},
+        return Response({"detail": "Request Body Error."},
                         status=status.HTTP_409_CONFLICT)
 
     if len(AdminTbl.objects.filter(
@@ -38,13 +38,13 @@ def login(request):
         user = AdminTbl.objects.get(
             email=serializer.validated_data['email'])
     else:
-        return Response({"message": "User didn't exist."},
+        return Response({"detail": "User didn't exist."},
                         status=status.HTTP_400_BAD_REQUEST)
 
     if not HashService.compare_pw_and_hash(
             serializer.validated_data["password"],
             user.password):
-        return Response({"message": "Email and password is Not Match."},
+        return Response({"detail": "Email and password is Not Match."},
                         status=status.HTTP_400_BAD_REQUEST)
 
     return Response({

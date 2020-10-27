@@ -4,4 +4,5 @@ exclude =
     __pycache__,
     venv,
     manage.py,
+    User/services.py
     settings.py
