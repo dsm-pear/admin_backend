@@ -6,5 +6,6 @@ class QuestionTbl(models.Model):
     description = models.CharField(max_length=150)
 
     class Meta:
+        ordering = ['-id']
         managed = False
         db_table = 'question_tbl'

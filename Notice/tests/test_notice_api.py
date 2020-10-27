@@ -20,6 +20,13 @@ def get_access_token():
     return res.data['access_token']
 
 
+def get_refresh_token():
+    payload = {'email': 'test@test.com', 'password': 'testpass'}
+    AdminTbl.objects.create_user(**payload)
+    res = APIClient().post(AUTH_URL, payload)
+    return res.data['refresh_token']
+
+
 def detail_url(notice_id):
     """Return notice detail URL"""
     return reverse('Notice:detail', args=[notice_id])
@@ -43,6 +50,13 @@ class PublicApiTests(TestCase):
         res = self.client.get(LIST_URL)
 
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_incorrect_access_token(self):
+        """Test that access_token is incorrect"""
+        self.client.credentials(HTTP_AUTHORIZATION=get_refresh_token())
+        res = self.client.get(LIST_URL)
+
+        self.assertEqual(res.status_code, status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 
 class PrivateNoticeApiTests(TestCase):

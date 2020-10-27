@@ -8,11 +8,13 @@ class ReportTbl(models.Model):
     type = models.CharField(max_length=7)
     grade = models.CharField(max_length=9)
     title = models.CharField(max_length=100)
-    created_at = models.DateTimeField()
-    is_accepted = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_accepted = models.IntegerField(default=0)
     languages = models.CharField(max_length=50)
+    comment = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
+        ordering = ['-id']
         managed = False
         db_table = 'report_tbl'
 
@@ -43,16 +45,18 @@ class UserTbl(models.Model):
     auth_status = models.IntegerField()
 
     class Meta:
+        ordering = ['-id']
         managed = False
         db_table = 'user_tbl'
 
 
 class CommentTbl(models.Model):
     report = models.ForeignKey('ReportTbl', models.DO_NOTHING)
-    created_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
     content = models.TextField()
     user = models.ForeignKey('UserTbl', models.DO_NOTHING)
 
     class Meta:
+        ordering = ['-id']
         managed = False
         db_table = 'comment_tbl'

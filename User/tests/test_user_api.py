@@ -56,14 +56,6 @@ class PublicUserApiTests(TestCase):
         self.assertIn('refresh_token', res.data)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
-    def test_create_token_None_credentials(self):
-        """Test that token is not created if invalid credentials are given"""
-        payload = {'email': 'test@test.com', 'password': 'wrong'}
-        res = self.client.post(AUTH_URL, payload)
-
-        self.assertIn('message', res.data)
-        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-
     def test_create_token_invalid_credentials(self):
         """Test that token is not created if invalid credentials are given"""
         create_user(email="test@test.com", password="testpass")

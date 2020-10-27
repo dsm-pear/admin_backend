@@ -13,4 +13,4 @@ class NoticeTbl(models.Model):
     class Meta:
         managed = False
         db_table = 'notice_tbl'
-        ordering = ["-created_at"]
+        ordering = ["-id"]

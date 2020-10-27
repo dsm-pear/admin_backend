@@ -41,7 +41,7 @@ class ListViewSet(viewsets.ModelViewSet):
     def get_queryset(self, *args, **kwargs):
         pk = JWTService.run_auth_process(self.request.headers)
         if len(AdminTbl.objects.filter(id=pk).values()):
-            queryset = ReportTbl.objects.filter(is_accepted=0)
+            queryset = ReportTbl.objects.filter(is_accepted=1)
             return queryset
         Response({"message": "User didn't exist."},
                  status=status.HTTP_400_BAD_REQUEST)
