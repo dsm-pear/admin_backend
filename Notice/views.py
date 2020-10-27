@@ -1,6 +1,4 @@
 from rest_framework import viewsets
-from rest_framework import status
-from rest_framework.response import Response
 from User.models import AdminTbl
 from User.services import JWTService
 from .serializers import NoticeSerializer
@@ -15,8 +13,6 @@ class NoticeViewSet(viewsets.ModelViewSet):
         if len(AdminTbl.objects.filter(id=pk).values()):
             queryset = NoticeTbl.objects.all()
             return queryset
-        Response({"message": "User didn't exist."},
-                 status=status.HTTP_400_BAD_REQUEST)
 
     def perform_create(self, serializer):
         pk = JWTService.run_auth_process(self.request.headers)

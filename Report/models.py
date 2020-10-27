@@ -14,7 +14,7 @@ class ReportTbl(models.Model):
     comment = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
-        ordering = ['-id']
+        ordering = ["-id"]
         managed = False
         db_table = 'report_tbl'
 
@@ -45,7 +45,7 @@ class UserTbl(models.Model):
     auth_status = models.IntegerField()
 
     class Meta:
-        ordering = ['-id']
+        ordering = ["-id"]
         managed = False
         db_table = 'user_tbl'
 
@@ -57,6 +57,6 @@ class CommentTbl(models.Model):
     user = models.ForeignKey('UserTbl', models.DO_NOTHING)
 
     class Meta:
-        ordering = ['-id']
+        ordering = ["-id"]
         managed = False
         db_table = 'comment_tbl'

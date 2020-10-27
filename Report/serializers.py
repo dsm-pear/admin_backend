@@ -24,6 +24,15 @@ class DetailSerializer(serializers.ModelSerializer):
                   'comments')
 
 
+class RequestSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ReportTbl
+        fields = ('id', 'user', 'description', 'access', 'type',
+                  'grade', 'title', 'created_at', 'is_accepted', 'languages',
+                  'comment')
+
+
 class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:

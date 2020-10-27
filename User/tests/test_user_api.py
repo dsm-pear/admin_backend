@@ -43,7 +43,7 @@ class PublicUserApiTests(TestCase):
 
         res = self.client.post(CREATE_USER_URL, payload)
 
-        self.assertIn('message', res.data)
+        self.assertIn('detail', res.data)
         self.assertEqual(res.status_code, status.HTTP_409_CONFLICT)
 
     def test_create_token_for_user(self):
@@ -62,7 +62,7 @@ class PublicUserApiTests(TestCase):
         payload = {'email': 'test@test.com', 'password': 'wrong'}
         res = self.client.post(AUTH_URL, payload)
 
-        self.assertIn('message', res.data)
+        self.assertIn('detail', res.data)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_token_no_user(self):
@@ -70,7 +70,7 @@ class PublicUserApiTests(TestCase):
         payload = {'email': 'test@test.com', 'password': 'testpass'}
         res = self.client.post(AUTH_URL, payload)
 
-        self.assertIn('message', res.data)
+        self.assertIn('detail', res.data)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_refresh_none(self):
