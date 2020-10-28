@@ -262,3 +262,13 @@ class PrivateNoticeApiTests(TestCase):
 
         self.assertIn('detail', res.data)
         self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_update_request(self):
+        """Test updating request"""
+        self.client.credentials(HTTP_AUTHORIZATION=get_access_token())
+        request = sample_request()
+
+        url = reqeust_detail_url(request.id)
+        payload = {'is_accepted': '0', 'comment': '구리네요'}
+        res = self.client.patch(url, payload)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)

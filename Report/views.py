@@ -15,9 +15,7 @@ class RequestViewSet(viewsets.ModelViewSet):
         """Return appropriate serializer class"""
         if self.action == 'list':
             return ListSerializer
-        elif self.action == 'retrieve':
-            return RequestSerializer
-        elif self.action == 'partial_update':
+        elif self.action == 'retrieve' or 'partial_update':
             return RequestSerializer
 
     def get_queryset(self, *args, **kwargs):
@@ -34,8 +32,6 @@ class ListViewSet(viewsets.ModelViewSet):
         if self.action == 'list':
             return ListSerializer
         elif self.action == 'retrieve':
-            return DetailSerializer
-        elif self.action == 'partial_update':
             return DetailSerializer
 
     def get_queryset(self, *args, **kwargs):
@@ -103,8 +99,7 @@ list_list = ListViewSet.as_view({
 })
 
 list_detail = ListViewSet.as_view({
-    'get': 'retrieve',
-    'patch': 'partial_update',
+    'get': 'retrieve'
 })
 
 search_list = SearchViewSet.as_view({'get': 'list'})

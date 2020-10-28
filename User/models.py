@@ -7,8 +7,6 @@ class UserManager(BaseUserManager):
     use_in_migrations = True
 
     def _create_user(self, email, password):
-        if not email:
-            raise ValueError('The given email must be set')
         email = self.normalize_email(email)
         user = self.model(email=email,
                           password=HashService.hash_string_to_password(
@@ -37,6 +35,3 @@ class AdminTbl(models.Model):
     class Meta:
         managed = False
         db_table = 'admin_tbl'
-
-    def __str__(self):
-        return self.email
