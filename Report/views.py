@@ -6,6 +6,7 @@ from User.services import JWTService
 from .serializers import DetailSerializer, ListSerializer,\
     CommentSerializer, RequestSerializer
 from .models import ReportTbl, CommentTbl, UserTbl
+from .exceptions import InvalidSort
 
 
 class RequestViewSet(viewsets.ModelViewSet):
@@ -53,38 +54,39 @@ class DeleteCommentViewSet(viewsets.ViewSet):
 
     def destroy(self, request, pk=None, comment=None):
         reports = ReportTbl.objects.get(id=pk)
-        comment = CommentTbl.objects.filter(report_id=reports.id) \
-            .get(id=comment)
-        comment.delete()
+        try:
+            comment = CommentTbl.objects.filter(report_id=reports.id)\
+                .get(id=comment)
+            comment.delete()
+        except CommentTbl.DoesNotExist:
+            return Response({"detail": "Not found."},
+                            status=status.HTTP_400_BAD_REQUEST)
         return Response({"detail": "ok"},
                         status=status.HTTP_200_OK)
 
 
-class SearchViewSet(viewsets.ViewSet):
+class SearchViewSet(viewsets.ModelViewSet):
 
-    def list(self, request):
-        try:
-            sort = request.GET['sort']
-        except ValueError:
-            return Response({"detail": "please enter sort"},
-                            status=status.HTTP_400_BAD_REQUEST)
+    def get_serializer_class(self):
+        """Return appropriate serializer class"""
+        if self.action == 'list':
+            return ListSerializer
 
-        search = request.GET['q']
+    def get_queryset(self):
+        sort = self.request.GET['sort']
+        search = self.request.GET['q']
 
         if sort == 'title':
-            list = ReportTbl.objects.filter(is_accepted=1)\
+            queryset = ReportTbl.objects.filter(is_accepted=1) \
                 .filter(title__contains=search)
-            serializer = ListSerializer(list, many=True)
-            return Response(serializer.data)
+            return queryset
         elif sort == 'user':
             user_pk = UserTbl.objects.filter(name__contains=search)
-            list__in = ReportTbl.objects.filter(is_accepted=1)\
+            queryset = ReportTbl.objects.filter(is_accepted=1)\
                 .filter(user__id__in=user_pk.all())
-            serializer = ListSerializer(list__in, many=True)
-            return Response(serializer.data)
+            return queryset
         else:
-            return Response({"detail": "please input correct sort"},
-                            status=status.HTTP_400_BAD_REQUEST)
+            raise InvalidSort
 
 
 request_list = RequestViewSet.as_view({
