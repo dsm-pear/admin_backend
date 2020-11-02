@@ -7,6 +7,7 @@ from .serializers import DetailSerializer, ListSerializer,\
     CommentSerializer, RequestSerializer
 from .models import ReportTbl, CommentTbl, UserTbl
 from .exceptions import InvalidSort
+import requests
 
 
 class RequestViewSet(viewsets.ModelViewSet):
@@ -17,6 +18,16 @@ class RequestViewSet(viewsets.ModelViewSet):
             return ListSerializer
         elif self.action == 'retrieve' or 'partial_update':
             return RequestSerializer
+
+    def partial_update(self, request, *args, **kwargs):
+        data = {'email': 'testt@test.com', 'username': 'user', 'password': 'password'}
+        URL = 'https://mini-avocat-1.herokuapp.com/users/create/'
+        headers = {'Content-Type': 'application/json'}
+        res = requests.post(URL, data=data, headers=headers)
+        print(res.status_code)
+        return Response({"detail": "ok"},
+                        status=status.HTTP_200_OK)
+
 
     def get_queryset(self, *args, **kwargs):
         pk = JWTService.run_auth_process(self.request.headers)
