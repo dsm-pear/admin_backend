@@ -9,7 +9,6 @@ class NoticeTbl(models.Model):
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     path = models.CharField(max_length=100, blank=True, null=True)
-    image = models.FileField()
 
     class Meta:
         ordering = ["-id"]

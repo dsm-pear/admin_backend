@@ -20,15 +20,14 @@ class NoticeViewSet(viewsets.ModelViewSet):
         admin = AdminTbl.objects.get(id=pk)
         serializer.save(admin=admin)
 
-        board_id = NoticeTbl.objects.last().id + 1
-        image_list = self.request.FILES.getlist('image_path')
-        for image in image_list:
-            data = {'email': 'testt@test.com', 'username': 'user', 'password': 'password'}
-            URL = 'https://mini-avocat-1.herokuapp.com/users/create/'
-            headers = {'Content-Type': 'application/json'}
-            res = requests.post(URL, data=data, headers=headers)
-            print(res.status_code)
-
+        notice_id = NoticeTbl.objects.last().id + 1
+        file = self.request.data['file']
+        print(file)
+        data = {'noticeFile': file}
+        URL = f'http://3.18.113.20:3000/notice/files/{notice_id}'
+        res = requests.post(URL, data=data)
+        print(res.status_code)
+        print(res.content)
 
 
 notice_list = NoticeViewSet.as_view({

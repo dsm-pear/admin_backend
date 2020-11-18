@@ -7,4 +7,4 @@ class NoticeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = NoticeTbl
-        fields = ('admin', 'id', 'title', 'description', 'created_at', 'path', 'image')
+        fields = ('admin', 'id', 'title', 'description', 'created_at', 'path')
