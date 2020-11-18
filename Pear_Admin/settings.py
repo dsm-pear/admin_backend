@@ -11,10 +11,12 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
+from Pear_Admin.hidden import JWT_SECRET_KEY, DB_PASSWORD, DB_HOST
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
@@ -38,6 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'User.apps.UserConfig',
+    'Notice.apps.NoticeConfig',
+    'Question.apps.QuestionConfig',
+    'Report.apps.ReportConfig',
 ]
 
 MIDDLEWARE = [
@@ -75,13 +82,20 @@ WSGI_APPLICATION = 'Pear_Admin.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'mydb',
+        'USER': 'admin',
+        'PASSWORD': DB_PASSWORD,
+        'HOST': DB_HOST,
+        'PORT': '3306',
+        'OPTIONS': {
+            'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
+        }
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -120,3 +134,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+AUTH_USER_MODEL = 'User.AdminTbl'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'Pear_Admin.utils.StandardPagination',
+    'PAGE_SIZE': 7
+}
