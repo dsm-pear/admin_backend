@@ -20,14 +20,15 @@ class RequestViewSet(viewsets.ModelViewSet):
             return RequestSerializer
 
     def partial_update(self, request, *args, **kwargs):
-        data = {'email': 'testt@test.com', 'username': 'user', 'password': 'password'}
+        data = {'email': 'testt@test.com',
+                'username': 'user',
+                'password': 'password'}
         URL = 'https://mini-avocat-1.herokuapp.com/users/create/'
         headers = {'Content-Type': 'application/json'}
         res = requests.post(URL, data=data, headers=headers)
         print(res.status_code)
         return Response({"detail": "ok"},
                         status=status.HTTP_200_OK)
-
 
     def get_queryset(self, *args, **kwargs):
         pk = JWTService.run_auth_process(self.request.headers)

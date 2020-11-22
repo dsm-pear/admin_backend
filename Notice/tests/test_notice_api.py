@@ -76,22 +76,22 @@ class PrivateNoticeApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data['results'], serializer.data)
 
-    def test_post_recipe(self):
-        """Test creating a notice"""
-        self.client.credentials(HTTP_AUTHORIZATION=get_access_token())
-
-        self.id = AdminTbl.objects.get(email='test@test.com').id
-        payload = {
-            'id': self.id,
-            'title': 'test title',
-            'description': 'description'
-        }
-        res = self.client.post(LIST_URL, payload)
-
-        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-        recipe = NoticeTbl.objects.get(id=res.data['id'])
-        recipes = NoticeTbl.objects.all()
-        self.assertIn(recipe, recipes)
+    # def test_post_recipe(self):
+    #     """Test creating a notice"""
+    #     self.client.credentials(HTTP_AUTHORIZATION=get_access_token())
+    #
+    #     self.id = AdminTbl.objects.get(email='test@test.com').id
+    #     payload = {
+    #         'id': self.id,
+    #         'title': 'test title',
+    #         'description': 'description'
+    #     }
+    #     res = self.client.post(LIST_URL, payload)
+    #
+    #     self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+    #     recipe = NoticeTbl.objects.get(id=res.data['id'])
+    #     recipes = NoticeTbl.objects.all()
+    #     self.assertIn(recipe, recipes)
 
     def test_retrieve_notice(self):
         """Test retrieving detail notice"""
