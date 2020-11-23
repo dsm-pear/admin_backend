@@ -19,22 +19,21 @@ class DetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReportTbl
-        fields = ('id', 'user', 'description', 'access', 'type',
+        fields = ('id', 'description', 'access', 'type',
                   'grade', 'title', 'created_at', 'is_accepted', 'languages',
-                  'comments')
+                  'comments', 'field', 'file_name')
 
 
 class RequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReportTbl
-        fields = ('id', 'user', 'description', 'access', 'type',
-                  'grade', 'title', 'created_at', 'is_accepted', 'languages',
-                  'comment')
+        fields = ('id', 'description', 'access', 'type',
+                  'grade', 'title', 'created_at', 'languages', 'field')
 
 
 class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CommentTbl
-        fields = ('report_id', 'id', 'user_id', 'created_at', 'content')
+        fields = ('id', 'user_email', 'created_at', 'content')

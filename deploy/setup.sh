@@ -9,7 +9,7 @@ PROJECT_BASE_PATH='/usr/local/apps/Pear_Admin'
 
 echo "Installing dependencies..."
 apt-get update
-apt-get install -y python3-dev python3-venv sqlite python-pip supervisor nginx git
+apt-get install -y python3-dev python3-venv python-pip supervisor nginx git python-dev libmysqlclient-dev
 
 # Create project directory
 mkdir -p $PROJECT_BASE_PATH
@@ -32,12 +32,12 @@ $PROJECT_BASE_PATH/env/bin/python manage.py collectstatic --noinput
 cp $PROJECT_BASE_PATH/deploy/supervisor_Pear_Admin_app.conf /etc/supervisor/conf.d/Pear_Admin_app.conf
 supervisorctl reread
 supervisorctl update
-supervisorctl restart Pear_Admin_app
+supervisorctl restart Pear_Admin
 
 # Configure nginx
 cp $PROJECT_BASE_PATH/deploy/nginx_Pear_Admin_app.conf /etc/nginx/sites-available/Pear_Admin_app.conf
 rm /etc/nginx/sites-enabled/default
-ln -s /etc/nginx/sites-available/nginx_Pear_Admin_app.conf /etc/nginx/sites-enabled/Pear_Admin_app.conf
+ln -s /etc/nginx/sites-available/Pear_Admin_app.conf /etc/nginx/sites-enabled/Pear_Admin_app.conf
 systemctl restart nginx.service
 
 echo "DONE! :)"

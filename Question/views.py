@@ -5,16 +5,20 @@ from .serializers import QuestionSerializer
 from .models import QuestionTbl
 
 
-class NoticeViewSet(viewsets.ModelViewSet):
+class QuestionViewSet(viewsets.ModelViewSet):
     serializer_class = QuestionSerializer
 
     def get_queryset(self, *args, **kwargs):
         pk = JWTService.run_auth_process(self.request.headers)
         if len(AdminTbl.objects.filter(id=pk).values()):
-            queryset = QuestionTbl.objects.get_queryset().order_by('id')
+            queryset = QuestionTbl.objects.all()
             return queryset
 
 
-questions = NoticeViewSet.as_view({
+questions = QuestionViewSet.as_view({
     'get': 'list',
+})
+
+question_detail = QuestionViewSet.as_view({
+    'delete': 'destroy',
 })

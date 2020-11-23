@@ -17,17 +17,21 @@ class NoticeViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         pk = JWTService.run_auth_process(self.request.headers)
-        admin = AdminTbl.objects.get(id=pk)
-        serializer.save(admin=admin)
+        # admin = AdminTbl.objects.get(id=pk)
+        serializer.save()
 
-        notice_id = NoticeTbl.objects.last().id + 1
-        file = self.request.data['file']
-        print(file)
-        data = {'noticeFile': file}
-        URL = f'http://3.18.113.20:3000/notice/files/{notice_id}'
-        res = requests.post(URL, data=data)
-        print(res.status_code)
-        print(res.content)
+        if NoticeTbl.objects.last() == None:
+            notice_id = 1
+        else:
+            notice_id = NoticeTbl.objects.last().id + 1
+
+        # file = self.request.data['file']
+        # print(file)
+        # data = {'noticeFile': file}
+        # URL = f'http://3.18.113.20:3000/notice/files/{notice_id}'
+        # res = requests.post(URL, data=data)
+        # print(res.status_code)
+        # print(res.content)
 
 
 notice_list = NoticeViewSet.as_view({

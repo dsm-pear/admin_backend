@@ -20,20 +20,20 @@ class RequestViewSet(viewsets.ModelViewSet):
             return RequestSerializer
 
     def partial_update(self, request, *args, **kwargs):
-        data = {'email': 'testt@test.com',
-                'username': 'user',
-                'password': 'password'}
-        URL = 'https://mini-avocat-1.herokuapp.com/users/create/'
-        headers = {'Content-Type': 'application/json'}
-        res = requests.post(URL, data=data, headers=headers)
-        print(res.status_code)
+        # data = {'email': 'testt@test.com',
+        #         'username': 'user',
+        #         'password': 'password'}
+        # URL = 'https://mini-avocat-1.herokuapp.com/users/create/'
+        # headers = {'Content-Type': 'application/json'}
+        # res = requests.post(URL, data=data, headers=headers)
+        # print(res.status_code)
         return Response({"detail": "ok"},
                         status=status.HTTP_200_OK)
 
     def get_queryset(self, *args, **kwargs):
         pk = JWTService.run_auth_process(self.request.headers)
         if len(AdminTbl.objects.filter(id=pk).values()):
-            queryset = ReportTbl.objects.filter(is_accepted=0)
+            queryset = ReportTbl.objects.filter(is_accepted=0).filter(comment__isnull=True)
             return queryset
 
 
@@ -90,9 +90,9 @@ class SearchViewSet(viewsets.ModelViewSet):
             return queryset
         elif sort == 'user':
             user_pk = UserTbl.objects.filter(name__contains=search)
-            queryset = ReportTbl.objects.filter(is_accepted=1)\
-                .filter(user__id__in=user_pk.all())
-            return queryset
+            # queryset = ReportTbl.objects.filter(is_accepted=1)\
+            #     .filter(user_email__in=user_pk.all())
+            # return queryset
         else:
             raise InvalidSort
 
