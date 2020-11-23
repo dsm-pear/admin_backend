@@ -53,10 +53,8 @@ def sample_request():
                                     is_accepted='0', languages='Python')
 
 
-def sample_list(pk=0, title='test title'):
+def sample_list(title='test title'):
     """Create and return a sample Notice"""
-    if pk == 0:
-        pk = create_user().email
     return ReportTbl.objects.create(description='description',
                                     access='admin', type='team',
                                     grade='grade1', title=title,
@@ -68,7 +66,7 @@ def sample_comment(report_id):
     """Create and return a sample comment"""
     return CommentTbl.objects.create(report_id=report_id,
                                      content='content',
-                                     user_id=create_user().id)
+                                     user_email=create_user())
 
 
 class PublicApiTests(TestCase):

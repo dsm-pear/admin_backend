@@ -7,7 +7,7 @@ from .serializers import DetailSerializer, ListSerializer,\
     CommentSerializer, RequestSerializer
 from .models import ReportTbl, CommentTbl, UserTbl
 from .exceptions import InvalidSort
-import requests
+# import requests
 
 
 class RequestViewSet(viewsets.ModelViewSet):
@@ -33,7 +33,8 @@ class RequestViewSet(viewsets.ModelViewSet):
     def get_queryset(self, *args, **kwargs):
         pk = JWTService.run_auth_process(self.request.headers)
         if len(AdminTbl.objects.filter(id=pk).values()):
-            queryset = ReportTbl.objects.filter(is_accepted=0).filter(comment__isnull=True)
+            queryset = ReportTbl.objects.filter(is_accepted=0)\
+                .filter(comment__isnull=True)
             return queryset
 
 
@@ -88,8 +89,8 @@ class SearchViewSet(viewsets.ModelViewSet):
             queryset = ReportTbl.objects.filter(is_accepted=1) \
                 .filter(title__contains=search)
             return queryset
-        elif sort == 'user':
-            user_pk = UserTbl.objects.filter(name__contains=search)
+        # elif sort == 'user':
+            # user_pk = UserTbl.objects.filter(name__contains=search)
             # queryset = ReportTbl.objects.filter(is_accepted=1)\
             #     .filter(user_email__in=user_pk.all())
             # return queryset

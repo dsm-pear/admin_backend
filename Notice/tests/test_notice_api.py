@@ -32,10 +32,9 @@ def detail_url(notice_id):
     return reverse('Notice:detail', args=[notice_id])
 
 
-def sample_notice(id, title='test title', description='description'):
+def sample_notice(title='test title', description='description'):
     """Create and return a sample Notice"""
-    return NoticeTbl.objects.create(admin_id=id,
-                                    title=title,
+    return NoticeTbl.objects.create(title=title,
                                     description=description)
 
 
@@ -68,7 +67,7 @@ class PrivateNoticeApiTests(TestCase):
     def test_list_recipe(self):
         """Test a list of notices"""
         self.client.credentials(HTTP_AUTHORIZATION=get_access_token())
-        sample_notice(id=AdminTbl.objects.get(email='test@test.com').id)
+        sample_notice()
 
         res = self.client.get(LIST_URL)
         recipes = NoticeTbl.objects.all().order_by('-id')
@@ -96,8 +95,7 @@ class PrivateNoticeApiTests(TestCase):
     def test_retrieve_notice(self):
         """Test retrieving detail notice"""
         self.client.credentials(HTTP_AUTHORIZATION=get_access_token())
-        notice = sample_notice(
-            id=AdminTbl.objects.get(email='test@test.com').id)
+        notice = sample_notice()
 
         url = detail_url(notice.id)
         res = self.client.get(url)
@@ -109,8 +107,7 @@ class PrivateNoticeApiTests(TestCase):
     def test_partial_update_notice(self):
         """Test partial update notice"""
         self.client.credentials(HTTP_AUTHORIZATION=get_access_token())
-        notice = sample_notice(
-            id=AdminTbl.objects.get(email='test@test.com').id)
+        notice = sample_notice()
 
         payload = {'title': 'changed title'}
         url = detail_url(notice.id)

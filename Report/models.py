@@ -22,7 +22,9 @@ class ReportTbl(models.Model):
 
 class TeamTbl(models.Model):
     name = models.CharField(max_length=50)
-    user_email = models.ForeignKey('UserTbl', models.DO_NOTHING, db_column='user_email')
+    user_email = models.ForeignKey('UserTbl',
+                                   models.DO_NOTHING,
+                                   db_column='user_email')
     report = models.ForeignKey('ReportTbl', models.DO_NOTHING)
 
     class Meta:
@@ -32,7 +34,9 @@ class TeamTbl(models.Model):
 
 class MemberTbl(models.Model):
     team = models.ForeignKey('TeamTbl', models.DO_NOTHING)
-    user_email = models.ForeignKey('UserTbl', models.DO_NOTHING, db_column='user_email')
+    user_email = models.ForeignKey('UserTbl',
+                                   models.DO_NOTHING,
+                                   db_column='user_email')
 
     class Meta:
         managed = False
@@ -54,9 +58,11 @@ class UserTbl(models.Model):
 
 class CommentTbl(models.Model):
     report = models.ForeignKey('ReportTbl', models.DO_NOTHING)
-    created_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
     content = models.TextField()
-    user_email = models.ForeignKey('UserTbl', models.DO_NOTHING, db_column='user_email')
+    user_email = models.ForeignKey('UserTbl',
+                                   models.DO_NOTHING,
+                                   db_column='user_email')
 
     class Meta:
         ordering = ["-id"]

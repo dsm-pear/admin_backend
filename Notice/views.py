@@ -1,4 +1,4 @@
-import requests
+# import requests
 from rest_framework import viewsets
 from User.models import AdminTbl
 from User.services import JWTService
@@ -17,21 +17,20 @@ class NoticeViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         pk = JWTService.run_auth_process(self.request.headers)
-        # admin = AdminTbl.objects.get(id=pk)
-        serializer.save()
+        if len(AdminTbl.objects.filter(id=pk).values()):
+            serializer.save()
+            # if NoticeTbl.objects.last() == None:
+            #     notice_id = 1
+            # else:
+            #     notice_id = NoticeTbl.objects.last().id + 1
 
-        if NoticeTbl.objects.last() == None:
-            notice_id = 1
-        else:
-            notice_id = NoticeTbl.objects.last().id + 1
-
-        # file = self.request.data['file']
-        # print(file)
-        # data = {'noticeFile': file}
-        # URL = f'http://3.18.113.20:3000/notice/files/{notice_id}'
-        # res = requests.post(URL, data=data)
-        # print(res.status_code)
-        # print(res.content)
+            # file = self.request.data['file']
+            # print(file)
+            # data = {'noticeFile': file}
+            # URL = f'http://3.18.113.20:3000/notice/files/{notice_id}'
+            # res = requests.post(URL, data=data)
+            # print(res.status_code)
+            # print(res.content)
 
 
 notice_list = NoticeViewSet.as_view({
