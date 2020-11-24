@@ -13,6 +13,7 @@ class ReportTbl(models.Model):
     file_name = models.CharField(max_length=50)
     comment = models.CharField(max_length=100, blank=True, null=True)
     field = models.CharField(max_length=8, blank=True, null=True)
+    github = models.CharField(max_length=50)
 
     class Meta:
         ordering = ["-id"]

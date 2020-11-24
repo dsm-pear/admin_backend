@@ -50,7 +50,7 @@ class JWTService(object):
 
     @staticmethod
     def create_access_token_with_id(user_id: int,
-                                    expired_minute: int = 5) -> str:
+                                    expired_minute: int = 10) -> str:
         return jwt.encode({
             'id': user_id,
             'exp': datetime.utcnow()+timedelta(minutes=expired_minute)
