@@ -45,7 +45,7 @@ class JWTService(object):
 
     @staticmethod
     def check_header_include(headers: dict, key: str) -> None:
-        if (key not in headers) or (headers['Authorization'] is ''):
+        if (key not in headers) or (headers['Authorization'] == ''):
             raise KeyError
 
     @staticmethod

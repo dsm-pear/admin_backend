@@ -10,9 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
-from pathlib import Path
-from datetime import timedelta
-from Pear_Admin.hidden import JWT_SECRET_KEY, DB_PASSWORD, DB_HOST
+from app.Pear_Admin.hidden import DB_PASSWORD, DB_HOST
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
