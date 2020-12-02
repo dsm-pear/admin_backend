@@ -1,8 +1,8 @@
 from rest_framework import viewsets
-from User.models import AdminTbl
+from core.models import AdminTbl
 from User.services import JWTService
 from .serializers import QuestionSerializer
-from .models import QuestionTbl
+from core.models import QuestionTbl
 
 
 class QuestionViewSet(viewsets.ModelViewSet):

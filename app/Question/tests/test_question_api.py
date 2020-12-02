@@ -4,9 +4,9 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
 
-from Question.models import QuestionTbl
-from Question.serializers import QuestionSerializer
-from User.models import AdminTbl
+from app.Question import QuestionTbl
+from app.Question import QuestionSerializer
+from app.User import AdminTbl
 
 
 LIST_URL = reverse('Question:list')

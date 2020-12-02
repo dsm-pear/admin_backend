@@ -1,11 +1,11 @@
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
-from User.models import AdminTbl
+from core.models import AdminTbl
 from User.services import JWTService
 from .serializers import DetailSerializer, ListSerializer, \
     CommentSerializer, RequestSerializer, DenySerializer
-from .models import ReportTbl, CommentTbl, UserTbl, MemberTbl, TeamTbl
+from core.models import ReportTbl, CommentTbl, UserTbl
 from .exceptions import InvalidSort
 # import requests
 

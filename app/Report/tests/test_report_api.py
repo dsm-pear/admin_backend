@@ -6,9 +6,9 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
 
-from Report.models import UserTbl, ReportTbl, CommentTbl
-from Report.serializers import ListSerializer, DetailSerializer
-from User.models import AdminTbl
+from app.Report import UserTbl, ReportTbl, CommentTbl
+from app.Report import ListSerializer, DetailSerializer
+from app.User import AdminTbl
 
 
 REQUEST_URL = reverse('Report:request')

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import NoticeTbl
+from core.models import NoticeTbl
 
 
 class NoticeSerializer(serializers.ModelSerializer):

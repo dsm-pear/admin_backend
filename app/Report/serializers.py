@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import ReportTbl, CommentTbl, TeamTbl, MemberTbl, UserTbl
+from core.models import ReportTbl, CommentTbl, TeamTbl, MemberTbl, UserTbl
 
 
 class ListSerializer(serializers.ModelSerializer):
