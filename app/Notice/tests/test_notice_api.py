@@ -4,9 +4,9 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
 
-from Notice.models import NoticeTbl
+from core.models import NoticeTbl
 from Notice.serializers import NoticeSerializer
-from User.models import AdminTbl
+from core.models import AdminTbl
 
 
 LIST_URL = reverse('Notice:list')

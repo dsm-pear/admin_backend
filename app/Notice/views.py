@@ -1,9 +1,9 @@
 # import requests
 from rest_framework import viewsets
-from User.models import AdminTbl
+from core.models import AdminTbl
 from User.services import JWTService
 from .serializers import NoticeSerializer
-from .models import NoticeTbl
+from core.models import NoticeTbl
 
 
 class NoticeViewSet(viewsets.ModelViewSet):

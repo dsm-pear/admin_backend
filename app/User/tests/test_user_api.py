@@ -4,7 +4,7 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
 
-from User.models import AdminTbl
+from core.models import AdminTbl
 
 
 CREATE_USER_URL = reverse('User:create')

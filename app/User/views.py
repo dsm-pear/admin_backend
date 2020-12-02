@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 
 from .serializers import UserCreateSerializer, LoginSerializer
-from .models import AdminTbl
+from core.models import AdminTbl
 from .services import HashService, JWTService
 
 

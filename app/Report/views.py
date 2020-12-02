@@ -1,11 +1,11 @@
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
-from User.models import AdminTbl
+from core.models import AdminTbl
 from User.services import JWTService
 from .serializers import DetailSerializer, ListSerializer, \
     CommentSerializer, RequestSerializer, DenySerializer
-from .models import ReportTbl, CommentTbl, UserTbl, MemberTbl, TeamTbl
+from core.models import ReportTbl, CommentTbl, UserTbl, MemberTbl, TeamTbl
 from .exceptions import InvalidSort
 # import requests
 
@@ -92,17 +92,17 @@ class SearchViewSet(viewsets.ModelViewSet):
             return queryset
         elif sort == 'user':
             users = UserTbl.objects.filter(name__contains=search)
-            # for user in users:
-            #     members = MemberTbl.objects.filter(user_email=user.email)
-            #     for member in members:
-            #         teams = TeamTbl.objects.filter(id=member.team_id)
-            #         for team in teams:
-            #             report_ids = team.report_id
-            #
-            # for report_id in report_ids:
-            #     queryset = ReportTbl.objects.filter(is_accepted=1) \
-            #         .filter(id=report_id)
-            # return queryset
+            for user in users:
+                members = MemberTbl.objects.filter(user_email=user.email)
+                for member in members:
+                    teams = TeamTbl.objects.filter(id=member.team_id)
+                    for team in teams:
+                        report_ids = team.report_id
+
+            for report_id in report_ids:
+                queryset = ReportTbl.objects.filter(is_accepted=1) \
+                    .filter(id=report_id)
+            return queryset
         else:
             raise InvalidSort
 

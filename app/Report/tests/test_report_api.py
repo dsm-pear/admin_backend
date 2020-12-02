@@ -6,9 +6,8 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
 
-from Report.models import UserTbl, ReportTbl, CommentTbl
+from core.models import UserTbl, ReportTbl, CommentTbl, AdminTbl, TeamTbl
 from Report.serializers import ListSerializer, DetailSerializer
-from User.models import AdminTbl
 
 
 REQUEST_URL = reverse('Report:request')
@@ -44,10 +43,16 @@ def create_user(name='username'):
                                   name=name, auth_status='1')
 
 
+def create_team(id):
+    return TeamTbl.objects.create(name='team',
+                                  user_email=create_user(),
+                                  report_id=id)
+
+
 def sample_request():
     """Create and return a sample Notice"""
     return ReportTbl.objects.create(description='description',
-                                    access='admin', type='team',
+                                    access='admin', type='sole',
                                     grade='grade1', title='title',
                                     field='web',
                                     is_accepted='0', languages='Python')
@@ -56,7 +61,7 @@ def sample_request():
 def sample_list(title='test title'):
     """Create and return a sample Notice"""
     return ReportTbl.objects.create(description='description',
-                                    access='admin', type='team',
+                                    access='admin', type='sole',
                                     grade='grade1', title=title,
                                     field='web',
                                     is_accepted='1', languages='Python')
@@ -64,9 +69,10 @@ def sample_list(title='test title'):
 
 def sample_comment(report_id):
     """Create and return a sample comment"""
+    user = UserTbl.objects.get(email='test@test.com')
     return CommentTbl.objects.create(report_id=report_id,
                                      content='content',
-                                     user_email=create_user())
+                                     user_email=user)
 
 
 class PublicApiTests(TestCase):
@@ -136,6 +142,7 @@ class PrivateNoticeApiTests(TestCase):
         """Test retrieving detail request"""
         self.client.credentials(HTTP_AUTHORIZATION=get_access_token())
         request = sample_request()
+        create_team(request.id)
 
         url = reqeust_detail_url(request.id)
         res = self.client.get(url)
@@ -176,6 +183,7 @@ class PrivateNoticeApiTests(TestCase):
         """Test retrieving detail list"""
         self.client.credentials(HTTP_AUTHORIZATION=get_access_token())
         list = sample_list()
+        create_team(list.id)
 
         url = list_detail_url(list.id)
         res = self.client.get(url)
@@ -196,6 +204,7 @@ class PrivateNoticeApiTests(TestCase):
         """Test retrieving detail list with a comment"""
         self.client.credentials(HTTP_AUTHORIZATION=get_access_token())
         list = sample_list()
+        create_team(list.id)
         sample_comment(list.id)
         serializer = DetailSerializer(list)
         self.assertNotEqual(serializer.data['comments'], [])
@@ -204,6 +213,7 @@ class PrivateNoticeApiTests(TestCase):
         """Test deleting the comment successful"""
         self.client.credentials(HTTP_AUTHORIZATION=get_access_token())
         list = sample_list()
+        create_team(list.id)
         comment = sample_comment(list.id)
         url = comments_detail_url(list.id, comment.id)
 
@@ -220,6 +230,7 @@ class PrivateNoticeApiTests(TestCase):
         """Test deleting the invalid comment"""
         self.client.credentials(HTTP_AUTHORIZATION=get_access_token())
         list = sample_list()
+        create_team(list.id)
         sample_comment(list.id)
         url = comments_detail_url(list.id, '3')
 
