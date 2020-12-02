@@ -2,7 +2,7 @@ language: python
 python:
     - "3.7"
 install: "pip install -r requirements.txt"
-script: coverage run --source=app manage.py test --keepdb && flake8
+script: coverage run --source=./app manage.py test --keepdb && flake8
 notifications:
     slack: pear-ldh1042:mCNcIVNrZs0gIBnTWbi2Sf4C
 after_success:
