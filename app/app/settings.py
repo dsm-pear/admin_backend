@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
-from app.hidden import DB_PASSWORD, DB_HOST
+from .hidden import DB_PASSWORD, DB_HOST
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
