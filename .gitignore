@@ -1,4 +1,4 @@
-app/app/hidden.py
+#app/app/hidden.py
 *.pyc
 *~
 venv
