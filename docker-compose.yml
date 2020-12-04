@@ -1,14 +1,14 @@
 version: "3"
 
 services:
-#  web:
-#    image: nginx
-#    ports:
-#      - 80:80
-#    volumes:
-#      - ./nginx/conf.d:/etc/nginx/conf.d
-#    depends_on:
-#      - app
+  web:
+    image: nginx
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d
+    depends_on:
+      - app
 
   app:
     build:
