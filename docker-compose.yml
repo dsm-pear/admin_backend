@@ -6,7 +6,7 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - app
 
@@ -31,9 +31,9 @@ services:
   db:
     image: mysql:latest
     environment:
-      MYSQL_ROOT_HOST: pear-admin-test.cgbmjhvcpi1q.ap-northeast-2.rds.amazonaws.com
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: pear-admin-test
+      MYSQL_ROOT_HOST: pear-db.cucn80iykftz.us-east-2.rds.amazonaws.com
+      MYSQL_USER: root
+      MYSQL_PASSWORD: rootroot
       MYSQL_DATABASE: mydb
 
 
