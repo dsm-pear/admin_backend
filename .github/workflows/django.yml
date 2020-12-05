@@ -33,7 +33,8 @@ jobs:
       run: |
         cd app
         docker-compose run app sh -c "python manage.py test --keepdb && flake8"
-    
+        
+    - uses: 8398a7/action-slack@v3
     - name: slack notification
       with:
         status: ${{ job.status }}
