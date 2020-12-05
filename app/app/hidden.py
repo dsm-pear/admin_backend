@@ -1,3 +1,3 @@
 JWT_SECRET_KEY = 'HIDDEN'
-DB_PASSWORD = 'pear-admin-test'
-DB_HOST = 'pear-admin-test.cgbmjhvcpi1q.ap-northeast-2.rds.amazonaws.com'
+DB_PASSWORD = 'rootroot'
+DB_HOST = 'pear-db.cucn80iykftz.us-east-2.rds.amazonaws.com'
