@@ -54,7 +54,7 @@ def sample_request():
     return ReportTbl.objects.create(description='description',
                                     access='admin', type='sole',
                                     grade='grade1', title='title',
-                                    field='web',
+                                    field='web', file_name='',
                                     is_accepted='0', languages='Python')
 
 
@@ -63,7 +63,7 @@ def sample_list(title='test title'):
     return ReportTbl.objects.create(description='description',
                                     access='admin', type='sole',
                                     grade='grade1', title=title,
-                                    field='web',
+                                    field='web', file_name='',
                                     is_accepted='1', languages='Python')
 
 
