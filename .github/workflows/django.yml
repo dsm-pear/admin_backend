@@ -17,7 +17,7 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: [3.9]
-
+    
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -32,4 +32,13 @@ jobs:
     - name: Run Tests
       run: |
         cd app
-        docker-compose run app sh -c "python manage.py test && flake8"
+        docker-compose run app sh -c "python manage.py test --keepdb && flake8"
+    
+    - name: slack notification
+      with:
+        status: ${{ job.status }}
+        author_name: Django CI
+        fields: repo,message,commit,author,action,eventName # selectable (default: repo,message)
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+      if: always() # Pick up events even if the job fails or is canceled.
