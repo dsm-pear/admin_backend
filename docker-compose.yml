@@ -6,7 +6,7 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/nginx.conf:/etc/nginx/sites-available/Pear_Admin_app.conf
     depends_on:
       - app
 
@@ -21,17 +21,17 @@ services:
       sh -c "python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
     environment:
-      - DB_HOST=pear-admin-test.cgbmjhvcpi1q.ap-northeast-2.rds.amazonaws.com
+      - DB_HOST=pear.c6gcx2prjdrq.ap-northeast-2.rds.amazonaws.com
       - DB_NAME=mydb
-      - DB_USER=admin
-      - DB_PASS=pear-admin-test
+      - DB_USER=root
+      - DB_PASS=rootroot
     depends_on:
       - db
 
   db:
     image: mysql:latest
     environment:
-      MYSQL_ROOT_HOST: pear-db.cucn80iykftz.us-east-2.rds.amazonaws.com
+      MYSQL_ROOT_HOST: pear.c6gcx2prjdrq.ap-northeast-2.rds.amazonaws.com
       MYSQL_USER: root
       MYSQL_PASSWORD: rootroot
       MYSQL_DATABASE: mydb
