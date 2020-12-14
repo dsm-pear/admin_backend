@@ -4,7 +4,7 @@ services:
   web:
     image: nginx
     ports:
-      - 80:80
+      - 8080:80
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/sites-available/Pear_Admin_app.conf
     depends_on:

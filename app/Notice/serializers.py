@@ -6,4 +6,11 @@ class NoticeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = NoticeTbl
+        fields = ('id', 'title', 'created_at')
+
+
+class NoticeDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = NoticeTbl
         fields = ('id', 'title', 'description', 'created_at', 'file_name')

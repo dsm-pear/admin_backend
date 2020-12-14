@@ -2,12 +2,18 @@
 from rest_framework import viewsets
 from core.models import AdminTbl
 from User.services import JWTService
-from .serializers import NoticeSerializer
+from .serializers import NoticeSerializer, NoticeDetailSerializer
 from core.models import NoticeTbl
 
 
 class NoticeViewSet(viewsets.ModelViewSet):
-    serializer_class = NoticeSerializer
+
+    def get_serializer_class(self):
+        """Return appropriate serializer class"""
+        if self.action == 'list':
+            return NoticeSerializer
+        elif self.action == 'retrieve':
+            return NoticeDetailSerializer
 
     def get_queryset(self, *args, **kwargs):
         pk = JWTService.run_auth_process(self.request.headers)
