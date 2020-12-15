@@ -40,16 +40,18 @@ class AdminTbl(models.Model):
 class ReportTbl(models.Model):
     description = models.CharField(max_length=150)
     access = models.CharField(max_length=5)
+    field = models.CharField(max_length=8)
     type = models.CharField(max_length=7)
     grade = models.CharField(max_length=9)
     title = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     is_accepted = models.IntegerField()
+    is_submitted = models.IntegerField()
     languages = models.CharField(max_length=100)
+    team_name = models.CharField(max_length=45)
     file_name = models.CharField(max_length=50)
     comment = models.CharField(max_length=100, blank=True, null=True)
-    field = models.CharField(max_length=8, blank=True, null=True)
-    github = models.CharField(max_length=50)
+    github = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
         ordering = ["-id"]
@@ -57,23 +59,11 @@ class ReportTbl(models.Model):
         db_table = 'report_tbl'
 
 
-class TeamTbl(models.Model):
-    name = models.CharField(max_length=50)
+class MemberTbl(models.Model):
     user_email = models.ForeignKey('UserTbl',
                                    models.DO_NOTHING,
                                    db_column='user_email')
     report = models.ForeignKey('ReportTbl', models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'team_tbl'
-
-
-class MemberTbl(models.Model):
-    team = models.ForeignKey('TeamTbl', models.DO_NOTHING)
-    user_email = models.ForeignKey('UserTbl',
-                                   models.DO_NOTHING,
-                                   db_column='user_email')
 
     class Meta:
         managed = False
@@ -117,6 +107,15 @@ class NoticeTbl(models.Model):
         ordering = ["-id"]
         managed = False
         db_table = 'notice_tbl'
+
+
+class NoticeFileTbl(models.Model):
+    path = models.CharField(max_length=100)
+    notice = models.ForeignKey('NoticeTbl', models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'notice_file_tbl'
 
 
 class QuestionTbl(models.Model):

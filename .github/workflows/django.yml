@@ -28,11 +28,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install docker-compose
+        pip install coverage codecov
     - name: Run Tests
       run: |
         cd app
         docker-compose run app sh -c "coverage run --source='.' manage.py test --keepdb && flake8"
-      
+        docker-compose run app sh -c "codecov"
+
     - name: slack notification
       uses: 8398a7/action-slack@v3
       with:
@@ -52,6 +54,7 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:
-          file: ./coverage
+          file: .coverage
         run: |
           bash <(curl -s https://codecov.io/bash)
+

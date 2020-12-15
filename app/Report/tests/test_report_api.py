@@ -6,7 +6,7 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
 
-from core.models import UserTbl, ReportTbl, CommentTbl, AdminTbl, TeamTbl
+from core.models import UserTbl, ReportTbl, CommentTbl, AdminTbl
 from Report.serializers import ListSerializer, DetailSerializer
 
 
@@ -43,18 +43,13 @@ def create_user(name='username'):
                                   name=name, auth_status='1')
 
 
-def create_team(id):
-    return TeamTbl.objects.create(name='team',
-                                  user_email=create_user(),
-                                  report_id=id)
-
-
 def sample_request():
     """Create and return a sample Notice"""
     return ReportTbl.objects.create(description='description',
                                     access='admin', type='sole',
                                     grade='grade1', title='title',
                                     field='web', file_name='',
+                                    is_submitted='1',
                                     is_accepted='0', languages='Python')
 
 
@@ -64,6 +59,7 @@ def sample_list(title='test title'):
                                     access='admin', type='sole',
                                     grade='grade1', title=title,
                                     field='web', file_name='',
+                                    is_submitted='1',
                                     is_accepted='1', languages='Python')
 
 

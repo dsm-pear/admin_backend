@@ -1,3 +1,4 @@
+import requests
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
@@ -5,9 +6,9 @@ from core.models import AdminTbl
 from User.services import JWTService
 from .serializers import DetailSerializer, ListSerializer, \
     CommentSerializer, RequestSerializer, DenySerializer
-from core.models import ReportTbl, CommentTbl, UserTbl, MemberTbl, TeamTbl
+from core.models import ReportTbl, CommentTbl, UserTbl, MemberTbl
 from .exceptions import InvalidSort
-# import requests
+import requests
 
 
 class RequestViewSet(viewsets.ModelViewSet):
@@ -21,15 +22,16 @@ class RequestViewSet(viewsets.ModelViewSet):
         elif self.action == 'partial_update':
             return DenySerializer
 
-    # def partial_update(self, request, *args, **kwargs):
-        # data = {'email': 'testt@test.com',
-        #         'username': 'user',
-        #         'password': 'password'}
-        # URL = 'https://mini-avocat-1.herokuapp.com/users/create/'
-        # headers = {'Content-Type': 'application/json'}
-        # res = requests.post(URL, data=data, headers=headers)
-        # print(res.status_code)
-        # return Response(status=status.HTTP_200_OK)
+    def partial_update(self, request, *args, **kwargs):
+        data = {'board_id': '',
+                'accepted': '',
+                'body': '',
+                'email': ''}
+        URL = 'http://20.55.121.118:8000/email/notification'
+        headers = {'Content-Type': 'application/json'}
+        res = requests.post(URL, data=data, headers=headers)
+        print(res.status_code)
+        return Response(status=status.HTTP_200_OK)
 
     def get_queryset(self, *args, **kwargs):
         pk = JWTService.run_auth_process(self.request.headers)
@@ -85,23 +87,25 @@ class SearchViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         sort = self.request.GET['sort']
         search = self.request.GET['q']
+        report_ids = []
 
         if sort == 'title':
             queryset = ReportTbl.objects.filter(is_accepted=1) \
                 .filter(title__contains=search)
             return queryset
         elif sort == 'user':
+            queryset = ReportTbl.objects.filter(is_accepted=1) \
+                .filter(team_name__contains=search)
             users = UserTbl.objects.filter(name__contains=search)
             for user in users:
                 members = MemberTbl.objects.filter(user_email=user.email)
                 for member in members:
-                    teams = TeamTbl.objects.filter(id=member.team_id)
-                    for team in teams:
-                        report_ids = team.report_id
+                    report_ids.append(member.report_id)
 
             for report_id in report_ids:
-                queryset = ReportTbl.objects.filter(is_accepted=1) \
+                report = ReportTbl.objects.filter(is_accepted=1) \
                     .filter(id=report_id)
+                queryset = queryset | report
             return queryset
         else:
             raise InvalidSort
