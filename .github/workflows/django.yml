@@ -32,8 +32,9 @@ jobs:
     - name: Run Tests
       run: |
         cd app
-        docker-compose run app sh -c "coverage run --source='.' manage.py test --keepdb && flake8"
-        docker-compose run app sh -c "codecov"
+        docker-compose run app sh -c "python manage.py test --keepdb && flake8"
+#        docker-compose run app sh -c "coverage run --source='.' manage.py test --keepdb && flake8"
+#        docker-compose run app sh -c "codecov"
 
     - name: slack notification
       uses: 8398a7/action-slack@v3
@@ -53,8 +54,6 @@ jobs:
         shell: bash
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        with:
-          file: .coverage
         run: |
           bash <(curl -s https://codecov.io/bash)
 
