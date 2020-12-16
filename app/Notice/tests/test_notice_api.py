@@ -101,8 +101,8 @@ class PrivateNoticeApiTests(TestCase):
         res = self.client.get(url)
 
         serializer = NoticeSerializer(notice)
-        self.assertEqual(res.data['description'],
-                         serializer.data['description'])
+        self.assertEqual(res.data['title'],
+                         serializer.data['title'])
 
     def test_partial_update_notice(self):
         """Test partial update notice"""

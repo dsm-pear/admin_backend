@@ -49,7 +49,7 @@ class RequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReportTbl
-        fields = ('id', 'description','title', 'team_name',
+        fields = ('id', 'description', 'title', 'team_name',
                   'created_at', 'languages', 'member',
                   'file_name', 'github')
 
@@ -62,6 +62,10 @@ class DenySerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
+
+    def get_name(self, obj):
+        return obj.user_email.name
 
     class Meta:
         model = CommentTbl

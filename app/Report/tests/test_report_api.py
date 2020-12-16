@@ -6,9 +6,8 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
 
-from core.models import UserTbl, ReportTbl, CommentTbl, AdminTbl
+from core.models import UserTbl, ReportTbl, CommentTbl, AdminTbl, MemberTbl
 from Report.serializers import ListSerializer, DetailSerializer
-
 
 REQUEST_URL = reverse('Report:request')
 LIST_URL = reverse('Report:list')
@@ -49,18 +48,27 @@ def sample_request():
                                     access='admin', type='sole',
                                     grade='grade1', title='title',
                                     field='web', file_name='',
-                                    is_submitted='1',
+                                    is_submitted='1', team_name='',
                                     is_accepted='0', languages='Python')
 
 
 def sample_list(title='test title'):
-    """Create and return a sample Notice"""
+    """Create and return a sample list"""
     return ReportTbl.objects.create(description='description',
                                     access='admin', type='sole',
                                     grade='grade1', title=title,
                                     field='web', file_name='',
-                                    is_submitted='1',
+                                    is_submitted='1', team_name='',
                                     is_accepted='1', languages='Python')
+
+
+def sample_member(report_id, email=''):
+    if email == '':
+        user = create_user()
+    else:
+        user = UserTbl.objects.get(email='test@test.com')
+    return MemberTbl.objects.create(user_email=user,
+                                    report_id=report_id)
 
 
 def sample_comment(report_id):
@@ -117,7 +125,7 @@ class PrivateNoticeApiTests(TestCase):
     def test_list_request_list(self):
         """Test a list of requests"""
         self.client.credentials(HTTP_AUTHORIZATION=get_access_token())
-        sample_request()
+        sample_member(sample_request().id)
 
         res = self.client.get(REQUEST_URL)
         reports = ReportTbl.objects.filter(is_accepted=0)
@@ -128,8 +136,8 @@ class PrivateNoticeApiTests(TestCase):
     def test_list_requests_with_list(self):
         """Test a list of requests"""
         self.client.credentials(HTTP_AUTHORIZATION=get_access_token())
-        sample_request()
-        sample_list()
+        sample_member(sample_request().id)
+        sample_member(sample_list().id, 'test@test.com')
 
         res = self.client.get(REQUEST_URL)
         self.assertEqual(res.data['count'], 1)
@@ -138,7 +146,7 @@ class PrivateNoticeApiTests(TestCase):
         """Test retrieving detail request"""
         self.client.credentials(HTTP_AUTHORIZATION=get_access_token())
         request = sample_request()
-        create_team(request.id)
+        sample_member(request.id)
 
         url = reqeust_detail_url(request.id)
         res = self.client.get(url)
@@ -169,8 +177,8 @@ class PrivateNoticeApiTests(TestCase):
     def test_list_with_request(self):
         """Test a list of lists"""
         self.client.credentials(HTTP_AUTHORIZATION=get_access_token())
-        sample_list()
-        sample_request()
+        sample_member(sample_list().id)
+        sample_member(sample_request().id, 'test@test.com')
 
         res = self.client.get(LIST_URL)
         self.assertEqual(res.data['count'], 1)
@@ -179,7 +187,7 @@ class PrivateNoticeApiTests(TestCase):
         """Test retrieving detail list"""
         self.client.credentials(HTTP_AUTHORIZATION=get_access_token())
         list = sample_list()
-        create_team(list.id)
+        sample_member(list.id)
 
         url = list_detail_url(list.id)
         res = self.client.get(url)
@@ -200,7 +208,7 @@ class PrivateNoticeApiTests(TestCase):
         """Test retrieving detail list with a comment"""
         self.client.credentials(HTTP_AUTHORIZATION=get_access_token())
         list = sample_list()
-        create_team(list.id)
+        sample_member(list.id)
         sample_comment(list.id)
         serializer = DetailSerializer(list)
         self.assertNotEqual(serializer.data['comments'], [])
@@ -209,7 +217,7 @@ class PrivateNoticeApiTests(TestCase):
         """Test deleting the comment successful"""
         self.client.credentials(HTTP_AUTHORIZATION=get_access_token())
         list = sample_list()
-        create_team(list.id)
+        sample_member(list.id)
         comment = sample_comment(list.id)
         url = comments_detail_url(list.id, comment.id)
 
@@ -226,7 +234,7 @@ class PrivateNoticeApiTests(TestCase):
         """Test deleting the invalid comment"""
         self.client.credentials(HTTP_AUTHORIZATION=get_access_token())
         list = sample_list()
-        create_team(list.id)
+        sample_member(list.id)
         sample_comment(list.id)
         url = comments_detail_url(list.id, '3')
 
@@ -236,8 +244,10 @@ class PrivateNoticeApiTests(TestCase):
     def test_search_with_title(self):
         """Test searching to title"""
         self.client.credentials(HTTP_AUTHORIZATION=get_access_token())
-        sample_list(title='error')
+        sample_member(sample_list(title='error').id)
+
         list = sample_list()
+        sample_member(list.id, 'test@test.com')
 
         serializer = ListSerializer(list)
         res = self.client.get(SEARCH_URL, {'sort': 'title', 'q': 'test title'})
