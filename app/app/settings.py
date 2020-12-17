@@ -149,3 +149,6 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'app.utils.StandardPagination',
     'PAGE_SIZE': 7
 }
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
