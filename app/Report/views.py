@@ -7,7 +7,7 @@ from .serializers import DetailSerializer, ListSerializer, \
     CommentSerializer, RequestSerializer, DenySerializer
 from core.models import ReportTbl, CommentTbl, UserTbl, MemberTbl
 from .exceptions import InvalidSort
-import requests
+# import requests
 
 
 class RequestViewSet(viewsets.ModelViewSet):
@@ -84,30 +84,65 @@ class SearchViewSet(viewsets.ModelViewSet):
             return ListSerializer
 
     def get_queryset(self):
-        sort = self.request.GET['sort']
-        search = self.request.GET['q']
-        report_ids = []
+        pk = JWTService.run_auth_process(self.request.headers)
+        if len(AdminTbl.objects.filter(id=pk).values()):
+            if 'q' not in self.request.GET:
+                raise InvalidSort
 
-        if sort == 'title':
-            queryset = ReportTbl.objects.filter(is_accepted=1) \
-                .filter(title__contains=search)
-            return queryset
-        elif sort == 'user':
-            queryset = ReportTbl.objects.filter(is_accepted=1) \
-                .filter(team_name__contains=search)
-            users = UserTbl.objects.filter(name__contains=search)
-            for user in users:
-                members = MemberTbl.objects.filter(user_email=user.email)
-                for member in members:
-                    report_ids.append(member.report_id)
+            sort = self.request.GET['sort']
+            search = self.request.GET['q']
+            report_ids = []
 
-            for report_id in report_ids:
-                report = ReportTbl.objects.filter(is_accepted=1) \
-                    .filter(id=report_id)
-                queryset = queryset | report
-            return queryset
-        else:
-            raise InvalidSort
+            if sort == 'title':
+                queryset = ReportTbl.objects.filter(is_accepted=1) \
+                    .filter(title__contains=search)
+                return queryset
+            elif sort == 'user':
+                queryset = ReportTbl.objects.filter(is_accepted=1) \
+                    .filter(team_name__contains=search)
+                users = UserTbl.objects.filter(name__contains=search)
+                for user in users:
+                    members = MemberTbl.objects.filter(user_email=user.email)
+                    for member in members:
+                        report_ids.append(member.report_id)
+
+                for report_id in report_ids:
+                    report = ReportTbl.objects.filter(is_accepted=1) \
+                        .filter(id=report_id)
+                    queryset = queryset | report
+                return queryset
+            else:
+                raise InvalidSort
+
+class FilterViewSet(viewsets.ModelViewSet):
+
+    def get_serializer_class(self):
+        """Return appropriate serializer class"""
+        if self.action == 'list':
+            return ListSerializer
+
+    def get_queryset(self):
+        pk = JWTService.run_auth_process(self.request.headers)
+        if len(AdminTbl.objects.filter(id=pk).values()):
+            if 'q' not in self.request.GET:
+                raise InvalidSort
+
+            filter = self.request.GET['q']
+
+            if filter == '2021':
+                queryset = ReportTbl.objects.filter(created_at__startswith='2021')
+                return queryset
+            elif filter == 'SOLE':
+                queryset = ReportTbl.objects.filter(type='TEAM')
+                return queryset
+            elif filter == 'TEAM':
+                queryset = ReportTbl.objects.filter(type='TEAM')
+                return queryset
+            elif filter == 'CIRCLE':
+                queryset = ReportTbl.objects.filter(type='CIRCLE')
+                return queryset
+            else:
+                raise InvalidSort
 
 
 request_list = RequestViewSet.as_view({
@@ -128,6 +163,8 @@ list_detail = ListViewSet.as_view({
 })
 
 search_list = SearchViewSet.as_view({'get': 'list'})
+
+filter_list = FilterViewSet.as_view({'get': 'list'})
 
 delete_comment = DeleteCommentViewSet.as_view({
     'delete': 'destroy',
