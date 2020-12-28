@@ -21,16 +21,16 @@ class RequestViewSet(viewsets.ModelViewSet):
         elif self.action == 'partial_update':
             return DenySerializer
 
-    def partial_update(self, request, *args, **kwargs):
-        data = {'board_id': '',
-                'accepted': '',
-                'body': '',
-                'email': ''}
-        URL = 'http://20.55.121.118:8000/email/notification'
-        headers = {'Content-Type': 'application/json'}
-        res = requests.post(URL, data=data, headers=headers)
-        print(res.status_code)
-        return Response(status=status.HTTP_200_OK)
+    # def partial_update(self, request, *args, **kwargs):
+    #     data = {'board_id': '',
+    #             'accepted': '',
+    #             'body': '',
+    #             'email': ''}
+    #     URL = 'http://20.55.121.118:8000/email/notification'
+    #     headers = {'Content-Type': 'application/json'}
+    #     res = requests.post(URL, data=data, headers=headers)
+    #     print(res.status_code)
+    #     return Response(status=status.HTTP_200_OK)
 
     def get_queryset(self, *args, **kwargs):
         pk = JWTService.run_auth_process(self.request.headers)

@@ -20,6 +20,7 @@ class ListSerializer(serializers.ModelSerializer):
 
 class DetailSerializer(serializers.ModelSerializer):
     comments = serializers.SerializerMethodField()
+    author = serializers.SerializerMethodField()
     member = serializers.SerializerMethodField()
 
     def get_comments(self, obj):
@@ -27,6 +28,9 @@ class DetailSerializer(serializers.ModelSerializer):
         serializer = CommentSerializer(comments, many=True)
         return serializer.data
 
+    def get_author(self, obj):
+        return obj.team_name
+
     def get_member(self, obj):
         member = MemberTbl.objects.filter(report_id=obj.id)
         serializer = MemberSerializer(member, many=True)
@@ -34,23 +38,23 @@ class DetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReportTbl
-        fields = ('id', 'description', 'title',
-                  'created_at', 'languages', 'team_name',
+        fields = ('id', 'description', 'title', 'type',
+                  'created_at', 'languages', 'author',
                   'comments', 'member', 'file_name', 'github')
 
 
 class RequestSerializer(serializers.ModelSerializer):
-    member = serializers.SerializerMethodField()
+    author = serializers.SerializerMethodField()
 
-    def get_member(self, obj):
-        member = MemberTbl.objects.filter(report_id=obj.id)
-        serializer = MemberSerializer(member, many=True)
+    def get_author(self, obj):
+        member = MemberTbl.objects.get(report_id=obj.id)
+        serializer = MemberSerializer(member)
         return serializer.data
 
     class Meta:
         model = ReportTbl
-        fields = ('id', 'description', 'title', 'team_name',
-                  'created_at', 'languages', 'member',
+        fields = ('id', 'description', 'title', 'type',
+                  'created_at', 'languages', 'author',
                   'file_name', 'github')
 
 

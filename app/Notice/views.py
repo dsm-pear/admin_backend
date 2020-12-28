@@ -12,7 +12,9 @@ class NoticeViewSet(viewsets.ModelViewSet):
         """Return appropriate serializer class"""
         if self.action == 'list':
             return NoticeSerializer
-        elif self.action == 'retrieve' or self.action == 'partial_update':
+        elif self.action == 'retrieve' or \
+                self.action == 'partial_update' or \
+                self.action == 'create':
             return NoticeDetailSerializer
 
     def get_queryset(self, *args, **kwargs):
