@@ -94,11 +94,11 @@ class SearchViewSet(viewsets.ModelViewSet):
             report_ids = []
 
             if sort == 'title':
-                queryset = ReportTbl.objects.filter(is_accepted=1) \
+                queryset = ReportTbl.objects.filter(is_accepted=2) \
                     .filter(title__contains=search)
                 return queryset
             elif sort == 'user':
-                queryset = ReportTbl.objects.filter(is_accepted=1) \
+                queryset = ReportTbl.objects.filter(is_accepted=2) \
                     .filter(team_name__contains=search)
                 users = UserTbl.objects.filter(name__contains=search)
                 for user in users:
@@ -107,7 +107,7 @@ class SearchViewSet(viewsets.ModelViewSet):
                         report_ids.append(member.report_id)
 
                 for report_id in report_ids:
-                    report = ReportTbl.objects.filter(is_accepted=1) \
+                    report = ReportTbl.objects.filter(is_accepted=2) \
                         .filter(id=report_id)
                     queryset = queryset | report
                 return queryset
@@ -130,16 +130,20 @@ class FilterViewSet(viewsets.ModelViewSet):
             filter = self.request.GET['q']
 
             if filter == '2021':
-                queryset = ReportTbl.objects.filter(created_at__startswith='2021')
+                queryset = ReportTbl.objects.filter(created_at__startswith='2021')\
+                    .filter(is_accepted=2)
                 return queryset
             elif filter == 'SOLE':
-                queryset = ReportTbl.objects.filter(type='TEAM')
+                queryset = ReportTbl.objects.filter(type='TEAM')\
+                    .filter(is_accepted=2)
                 return queryset
             elif filter == 'TEAM':
-                queryset = ReportTbl.objects.filter(type='TEAM')
+                queryset = ReportTbl.objects.filter(type='TEAM')\
+                    .filter(is_accepted=2)
                 return queryset
             elif filter == 'CIRCLE':
-                queryset = ReportTbl.objects.filter(type='CIRCLE')
+                queryset = ReportTbl.objects.filter(type='CIRCLE')\
+                    .filter(is_accepted=2)
                 return queryset
             else:
                 raise InvalidSort
