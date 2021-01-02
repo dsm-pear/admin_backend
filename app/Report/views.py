@@ -36,7 +36,8 @@ class RequestViewSet(viewsets.ModelViewSet):
         pk = JWTService.run_auth_process(self.request.headers)
         if len(AdminTbl.objects.filter(id=pk).values()):
             queryset = ReportTbl.objects.filter(is_accepted=0)\
-                .filter(comment__isnull=True)
+                .filter(comment__isnull=True)\
+                .filter(is_submitted=1)
             return queryset
 
 
@@ -52,7 +53,8 @@ class ListViewSet(viewsets.ModelViewSet):
     def get_queryset(self, *args, **kwargs):
         pk = JWTService.run_auth_process(self.request.headers)
         if len(AdminTbl.objects.filter(id=pk).values()):
-            queryset = ReportTbl.objects.filter(is_accepted=1)
+            queryset = ReportTbl.objects.filter(is_accepted=1)\
+                .filter(is_submitted=1)
             return queryset
 
 
@@ -94,12 +96,14 @@ class SearchViewSet(viewsets.ModelViewSet):
             report_ids = []
 
             if sort == 'title':
-                queryset = ReportTbl.objects.filter(is_accepted=2) \
-                    .filter(title__contains=search)
+                queryset = ReportTbl.objects.filter(is_accepted=1) \
+                    .filter(title__contains=search)\
+                    .filter(is_submitted=1)
                 return queryset
             elif sort == 'user':
-                queryset = ReportTbl.objects.filter(is_accepted=2) \
-                    .filter(team_name__contains=search)
+                queryset = ReportTbl.objects.filter(is_accepted=1) \
+                    .filter(team_name__contains=search)\
+                    .filter(is_submitted=1)
                 users = UserTbl.objects.filter(name__contains=search)
                 for user in users:
                     members = MemberTbl.objects.filter(user_email=user.email)
@@ -107,8 +111,9 @@ class SearchViewSet(viewsets.ModelViewSet):
                         report_ids.append(member.report_id)
 
                 for report_id in report_ids:
-                    report = ReportTbl.objects.filter(is_accepted=2) \
-                        .filter(id=report_id)
+                    report = ReportTbl.objects.filter(is_accepted=1) \
+                        .filter(id=report_id)\
+                        .filter(is_submitted=1)
                     queryset = queryset | report
                 return queryset
             else:
@@ -131,19 +136,19 @@ class FilterViewSet(viewsets.ModelViewSet):
 
             if filter == '2021':
                 queryset = ReportTbl.objects.filter(created_at__startswith='2021')\
-                    .filter(is_accepted=2)
+                    .filter(is_accepted=1).filter(is_submitted=1)
                 return queryset
             elif filter == 'SOLE':
                 queryset = ReportTbl.objects.filter(type='TEAM')\
-                    .filter(is_accepted=2)
+                    .filter(is_accepted=1).filter(is_submitted=1)
                 return queryset
             elif filter == 'TEAM':
                 queryset = ReportTbl.objects.filter(type='TEAM')\
-                    .filter(is_accepted=2)
+                    .filter(is_accepted=1).filter(is_submitted=1)
                 return queryset
             elif filter == 'CIRCLE':
                 queryset = ReportTbl.objects.filter(type='CIRCLE')\
-                    .filter(is_accepted=2)
+                    .filter(is_accepted=1).filter(is_submitted=1)
                 return queryset
             else:
                 raise InvalidSort

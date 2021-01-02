@@ -5,7 +5,7 @@ ENV PYTHONBUFFERED 1
 
 COPY ./requirements.txt /requirements.txt
 RUN apk add mysql mysql-client mysql-dev
-RUN apk update && apk add gcc libc-dev make git \
+RUN apk update && apk add --no-cache gcc libc-dev make git \
     libffi-dev openssl-dev python3-dev libxslt-dev docker-py
 RUN pip install --upgrade pip
 RUN pip install -r /requirements.txt
