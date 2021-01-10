@@ -109,20 +109,11 @@ class NoticeTbl(models.Model):
         db_table = 'notice_tbl'
 
 
-class NoticeFileTbl(models.Model):
-    path = models.CharField(max_length=100)
-    notice = models.ForeignKey('NoticeTbl', models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'notice_file_tbl'
-
-
 class QuestionTbl(models.Model):
     email = models.CharField(max_length=30)
     description = models.CharField(max_length=150)
 
     class Meta:
-        ordering = ["-id"]
+        ordering = ["id"]
         managed = False
         db_table = 'question_tbl'
