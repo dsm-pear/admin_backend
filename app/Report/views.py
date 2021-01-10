@@ -8,9 +8,11 @@ from .serializers import DetailSerializer, ListSerializer, \
 from core.models import ReportTbl, CommentTbl, UserTbl, MemberTbl
 from .exceptions import InvalidSort
 # import requests
+from app.utils import ScrollPagination
 
 
 class RequestViewSet(viewsets.ModelViewSet):
+    pagination_class = ScrollPagination
 
     def get_serializer_class(self):
         """Return appropriate serializer class"""
@@ -119,6 +121,7 @@ class SearchViewSet(viewsets.ModelViewSet):
             else:
                 raise InvalidSort
 
+
 class FilterViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
@@ -135,7 +138,8 @@ class FilterViewSet(viewsets.ModelViewSet):
             filter = self.request.GET['q']
 
             if filter == '2021':
-                queryset = ReportTbl.objects.filter(created_at__startswith='2021')\
+                queryset = ReportTbl.objects\
+                    .filter(created_at__startswith='2021')\
                     .filter(is_accepted=1).filter(is_submitted=1)
                 return queryset
             elif filter == 'SOLE':

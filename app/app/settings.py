@@ -31,7 +31,7 @@ SECRET_KEY = 'r0=@f(itcy-=if51*3#n)jj=&=#ooe!6wek=)+x+f$ymbo&6&b'
 #     '127.0.0.1'
 # ]
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
