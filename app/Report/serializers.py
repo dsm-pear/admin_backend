@@ -29,7 +29,12 @@ class DetailSerializer(serializers.ModelSerializer):
         return serializer.data
 
     def get_author(self, obj):
-        return obj.team_name
+        if (obj.type == 'SOLE'):
+            member = MemberTbl.objects.get(report_id=obj.id)
+            serializer = MemberSerializer(member)
+            return serializer.data["name"]
+        else:
+            return obj.team_name
 
     def get_member(self, obj):
         member = MemberTbl.objects.filter(report_id=obj.id)
@@ -39,22 +44,31 @@ class DetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReportTbl
         fields = ('id', 'description', 'title', 'type',
-                  'created_at', 'languages', 'author',
-                  'comments', 'member', 'file_name', 'github')
+                  'created_at', 'languages', 'author', 'member',
+                  'comments', 'file_name', 'github')
 
 
 class RequestSerializer(serializers.ModelSerializer):
     author = serializers.SerializerMethodField()
+    member = serializers.SerializerMethodField()
 
     def get_author(self, obj):
-        member = MemberTbl.objects.get(report_id=obj.id)
-        serializer = MemberSerializer(member)
+        if (obj.type == 'SOLE'):
+            member = MemberTbl.objects.get(report_id=obj.id)
+            serializer = MemberSerializer(member)
+            return serializer.data["name"]
+        else:
+            return obj.team_name
+
+    def get_member(self, obj):
+        member = MemberTbl.objects.filter(report_id=obj.id)
+        serializer = MemberSerializer(member, many=True)
         return serializer.data
 
     class Meta:
         model = ReportTbl
         fields = ('id', 'description', 'title', 'type',
-                  'created_at', 'languages', 'author',
+                  'created_at', 'languages', 'author', 'member',
                   'file_name', 'github')
 
 
