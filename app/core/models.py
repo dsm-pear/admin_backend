@@ -63,7 +63,8 @@ class MemberTbl(models.Model):
     user_email = models.ForeignKey('UserTbl',
                                    models.DO_NOTHING,
                                    db_column='user_email')
-    report = models.ForeignKey('ReportTbl', models.DO_NOTHING)
+    report = models.ForeignKey('ReportTbl', models.DO_NOTHING,
+                               db_column='report')
 
     class Meta:
         managed = False

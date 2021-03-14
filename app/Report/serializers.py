@@ -7,7 +7,7 @@ class ListSerializer(serializers.ModelSerializer):
 
     def get_author(self, obj):
         if(obj.type == 'SOLE'):
-            member = MemberTbl.objects.get(report_id=obj.id)
+            member = MemberTbl.objects.get(report=obj.id)
             serializer = MemberSerializer(member)
             return serializer.data["name"]
         else:
@@ -30,14 +30,14 @@ class DetailSerializer(serializers.ModelSerializer):
 
     def get_author(self, obj):
         if (obj.type == 'SOLE'):
-            member = MemberTbl.objects.get(report_id=obj.id)
+            member = MemberTbl.objects.get(report=obj.id)
             serializer = MemberSerializer(member)
             return serializer.data["name"]
         else:
             return obj.team_name
 
     def get_member(self, obj):
-        member = MemberTbl.objects.filter(report_id=obj.id)
+        member = MemberTbl.objects.filter(report=obj.id)
         serializer = MemberSerializer(member, many=True)
         return serializer.data
 
@@ -54,14 +54,14 @@ class RequestSerializer(serializers.ModelSerializer):
 
     def get_author(self, obj):
         if (obj.type == 'SOLE'):
-            member = MemberTbl.objects.get(report_id=obj.id)
+            member = MemberTbl.objects.get(report=obj.id)
             serializer = MemberSerializer(member)
             return serializer.data["name"]
         else:
             return obj.team_name
 
     def get_member(self, obj):
-        member = MemberTbl.objects.filter(report_id=obj.id)
+        member = MemberTbl.objects.filter(report=obj.id)
         serializer = MemberSerializer(member, many=True)
         return serializer.data
 
