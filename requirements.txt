@@ -7,7 +7,7 @@ chardet==3.0.4
 codecov==2.1.10
 coverage==5.3
 cryptography==3.3.2
-Django==2.2.13
+Django==2.2.18
 django-cors-headers==3.6.0
 djangorestframework==3.9.2
 djangorestframework-jwt==1.11.0
