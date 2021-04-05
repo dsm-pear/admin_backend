@@ -143,7 +143,7 @@ class FilterViewSet(viewsets.ModelViewSet):
                     .filter(is_accepted=1).filter(is_submitted=1)
                 return queryset
             elif filter == 'SOLE':
-                queryset = ReportTbl.objects.filter(type='TEAM')\
+                queryset = ReportTbl.objects.filter(type='SOLE')\
                     .filter(is_accepted=1).filter(is_submitted=1)
                 return queryset
             elif filter == 'TEAM':
