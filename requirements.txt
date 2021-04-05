@@ -6,7 +6,11 @@ cffi==1.14.3
 chardet==3.0.4
 coverage==5.3
 coveralls==2.1.2
+<<<<<<< HEAD
 cryptography>=3.3.2
+=======
+cryptography==3.3.2
+>>>>>>> f0b02b38d01580dae2b2a4f2cc62a7759f375d92
 django>=2.2.18
 django-cors-headers==3.7.0
 djangorestframework>=3.11.2
