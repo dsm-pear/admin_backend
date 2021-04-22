@@ -52,7 +52,7 @@ class JWTService(object):
         return jwt.encode({
             'id': user_id,
             'exp': datetime.utcnow()+timedelta(minutes=expired_minute)
-        }, 'JWT_SECRET_KEY', algorithm='HS256', headers={
+        }, 'JHHONG', algorithm='HS256', headers={
             'token': 'access'
         })
 
@@ -62,7 +62,7 @@ class JWTService(object):
         return jwt.encode({
             'id': user_id,
             'exp': datetime.utcnow()+timedelta(days=expired_days)
-        }, 'JWT_SECRET_KEY', algorithm='HS256', headers={
+        }, 'JHHONG', algorithm='HS256', headers={
             'token': 'refresh'
         })
 
@@ -71,5 +71,5 @@ class JWTService(object):
         if not token_type == jwt.get_unverified_header(access_token)['token']:
             raise jwt.exceptions.InvalidSignatureError
         return jwt.decode(access_token,
-                          'JWT_SECRET_KEY',
+                          'JHHONG',
                           algorithms=['HS256'])['id']
