@@ -1,3 +1,3 @@
-JWT_SECRET_KEY = 'HIDDEN'
+JWT_SECRET_KEY = 'jhhong'
 DB_PASSWORD = 'rootroot'
 DB_HOST = 'pear.c6gcx2prjdrq.ap-northeast-2.rds.amazonaws.com'
