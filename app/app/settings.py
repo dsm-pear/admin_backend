@@ -94,7 +94,7 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mydb',
+        'NAME': 'pear_db',
         'USER': 'root',
         'PASSWORD': DB_PASSWORD,
         'HOST': DB_HOST,
