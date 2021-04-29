@@ -22,7 +22,7 @@ services:
              python manage.py runserver 0.0.0.0:8000"
     environment:
       - DB_HOST=pear.c6gcx2prjdrq.ap-northeast-2.rds.amazonaws.com
-      - DB_NAME=mydb
+      - DB_NAME=pear_db
       - DB_USER=root
       - DB_PASS=rootroot
     depends_on:
@@ -35,6 +35,6 @@ services:
       MYSQL_ROOT_PASSWORD: rootroot
       MYSQL_USER: root
       MYSQL_PASSWORD: rootroot
-      MYSQL_DATABASE: mydb
+      MYSQL_DATABASE: pear_db
 
 
