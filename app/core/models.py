@@ -39,19 +39,13 @@ class AdminTbl(models.Model):
 
 class ReportTbl(models.Model):
     description = models.CharField(max_length=150)
-    access = models.CharField(max_length=5)
-    field = models.CharField(max_length=8)
-    type = models.CharField(max_length=7)
-    grade = models.CharField(max_length=9)
     title = models.CharField(max_length=100)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField()
     is_accepted = models.IntegerField()
     is_submitted = models.IntegerField()
-    languages = models.CharField(max_length=100)
-    team_name = models.CharField(max_length=45)
-    file_name = models.CharField(max_length=50)
     comment = models.CharField(max_length=100, blank=True, null=True)
-    github = models.CharField(max_length=50, blank=True, null=True)
+    github = models.CharField(max_length=100, blank=True, null=True)
+    team_name = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         ordering = ["-id"]
@@ -59,12 +53,33 @@ class ReportTbl(models.Model):
         db_table = 'report_tbl'
 
 
+class ReportTypeTbl(models.Model):
+    report = models.OneToOneField('ReportTbl', models.DO_NOTHING, primary_key=True)
+    access = models.CharField(max_length=5)
+    field = models.CharField(max_length=8)
+    type = models.CharField(max_length=7)
+    grade = models.CharField(max_length=9)
+
+    class Meta:
+        managed = False
+        db_table = 'report_type_tbl'
+
+
+class LanguageTbl(models.Model):
+    report_id = models.BigIntegerField(null=False)
+    languages = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'language_tbl'
+
+
 class MemberTbl(models.Model):
     user_email = models.ForeignKey('UserTbl',
                                    models.DO_NOTHING,
                                    db_column='user_email')
     report = models.ForeignKey('ReportTbl', models.DO_NOTHING,
-                               db_column='report')
+                               db_column='report_id')
 
     class Meta:
         managed = False
@@ -76,7 +91,6 @@ class UserTbl(models.Model):
     password = models.CharField(max_length=36)
     name = models.CharField(max_length=12)
     self_intro = models.CharField(max_length=200, blank=True, null=True)
-    auth_status = models.IntegerField()
 
     class Meta:
         ordering = ["-email"]

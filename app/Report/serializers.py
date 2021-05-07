@@ -1,17 +1,13 @@
 from rest_framework import serializers
-from core.models import ReportTbl, CommentTbl, MemberTbl, UserTbl
+from core.models import ReportTbl, CommentTbl, MemberTbl,\
+    UserTbl, ReportTypeTbl, LanguageTbl
 
 
 class ListSerializer(serializers.ModelSerializer):
     author = serializers.SerializerMethodField()
 
     def get_author(self, obj):
-        if(obj.type == 'SOLE'):
-            member = MemberTbl.objects.get(report=obj.id)
-            serializer = MemberSerializer(member)
-            return serializer.data["name"]
-        else:
-            return obj.team_name
+        return obj.team_name
 
     class Meta:
         model = ReportTbl
@@ -22,6 +18,11 @@ class DetailSerializer(serializers.ModelSerializer):
     comments = serializers.SerializerMethodField()
     author = serializers.SerializerMethodField()
     member = serializers.SerializerMethodField()
+    access = serializers.SerializerMethodField()
+    field = serializers.SerializerMethodField()
+    type = serializers.SerializerMethodField()
+    grade = serializers.SerializerMethodField()
+    languages = serializers.SerializerMethodField()
 
     def get_comments(self, obj):
         comments = CommentTbl.objects.filter(report_id=obj.id)
@@ -29,47 +30,88 @@ class DetailSerializer(serializers.ModelSerializer):
         return serializer.data
 
     def get_author(self, obj):
-        if (obj.type == 'SOLE'):
-            member = MemberTbl.objects.get(report=obj.id)
-            serializer = MemberSerializer(member)
-            return serializer.data["name"]
-        else:
-            return obj.team_name
+        return obj.team_name
 
     def get_member(self, obj):
         member = MemberTbl.objects.filter(report=obj.id)
         serializer = MemberSerializer(member, many=True)
         return serializer.data
 
+    def get_access(self, obj):
+        report = ReportTypeTbl.objects.get(report=obj.id)
+        return report.access
+
+    def get_field(self, obj):
+        report = ReportTypeTbl.objects.get(report=obj.id)
+        return report.field
+
+    def get_type(self, obj):
+        report = ReportTypeTbl.objects.get(report=obj.id)
+        return report.type
+
+    def get_grade(self, obj):
+        report = ReportTypeTbl.objects.get(report=obj.id)
+        return report.grade
+
+    def get_languages(self, obj):
+        language = LanguageTbl.objects.filter(report_id=obj.id)
+        str = ""
+        for lan in language:
+            str += lan.languages + ", "
+        return str[:-2]
+
     class Meta:
         model = ReportTbl
         fields = ('id', 'description', 'title', 'type',
-                  'created_at', 'languages', 'author', 'member',
-                  'comments', 'file_name', 'github')
+                  'created_at', 'author', 'member', 'comments',
+                  'github', 'grade', 'access', 'field', 'languages')
 
 
 class RequestSerializer(serializers.ModelSerializer):
     author = serializers.SerializerMethodField()
     member = serializers.SerializerMethodField()
+    access = serializers.SerializerMethodField()
+    field = serializers.SerializerMethodField()
+    type = serializers.SerializerMethodField()
+    grade = serializers.SerializerMethodField()
+    languages = serializers.SerializerMethodField()
 
     def get_author(self, obj):
-        if (obj.type == 'SOLE'):
-            member = MemberTbl.objects.get(report=obj.id)
-            serializer = MemberSerializer(member)
-            return serializer.data["name"]
-        else:
-            return obj.team_name
+        return obj.team_name
+
+    def get_access(self, obj):
+        report = ReportTypeTbl.objects.get(report=obj.id)
+        return report.access
+
+    def get_field(self, obj):
+        report = ReportTypeTbl.objects.get(report=obj.id)
+        return report.field
+
+    def get_type(self, obj):
+        report = ReportTypeTbl.objects.get(report=obj.id)
+        return report.type
+
+    def get_grade(self, obj):
+        report = ReportTypeTbl.objects.get(report=obj.id)
+        return report.grade
 
     def get_member(self, obj):
         member = MemberTbl.objects.filter(report=obj.id)
         serializer = MemberSerializer(member, many=True)
         return serializer.data
 
+    def get_languages(self, obj):
+        language = LanguageTbl.objects.filter(report_id=obj.id)
+        str = ""
+        for lan in language:
+            str += lan.languages + ", "
+        return str[:-2]
+
     class Meta:
         model = ReportTbl
         fields = ('id', 'description', 'title', 'type',
-                  'created_at', 'languages', 'author', 'member',
-                  'file_name', 'github')
+                  'created_at', 'author', 'member',
+                  'github', 'grade', 'access', 'field', 'languages')
 
 
 class DenySerializer(serializers.ModelSerializer):
