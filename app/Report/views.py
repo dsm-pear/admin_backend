@@ -5,9 +5,8 @@ from core.models import AdminTbl
 from User.services import JWTService
 from .serializers import DetailSerializer, ListSerializer, \
     CommentSerializer, RequestSerializer, DenySerializer
-from core.models import ReportTbl, CommentTbl, UserTbl, MemberTbl
+from core.models import ReportTbl, CommentTbl, UserTbl, MemberTbl, ReportTypeTbl
 from .exceptions import InvalidSort
-# import requests
 from app.utils import ScrollPagination
 
 
@@ -22,17 +21,6 @@ class RequestViewSet(viewsets.ModelViewSet):
             return RequestSerializer
         elif self.action == 'partial_update':
             return DenySerializer
-
-    # def partial_update(self, request, *args, **kwargs):
-    #     data = {'board_id': '',
-    #             'accepted': '',
-    #             'body': '',
-    #             'email': ''}
-    #     URL = 'http://20.55.121.118:8000/email/notification'
-    #     headers = {'Content-Type': 'application/json'}
-    #     res = requests.post(URL, data=data, headers=headers)
-    #     print(res.status_code)
-    #     return Response(status=status.HTTP_200_OK)
 
     def get_queryset(self, *args, **kwargs):
         pk = JWTService.run_auth_process(self.request.headers)
@@ -143,15 +131,21 @@ class FilterViewSet(viewsets.ModelViewSet):
                     .filter(is_accepted=1).filter(is_submitted=1)
                 return queryset
             elif filter == 'SOLE':
-                queryset = ReportTbl.objects.filter(type='SOLE')\
+                ids = ReportTypeTbl.objects.filter(type='SOLE').values_list('report_id', flat=True).distinct()
+                print(list(ids))
+                queryset = ReportTbl.objects.filter(pk__in=list(ids))\
                     .filter(is_accepted=1).filter(is_submitted=1)
                 return queryset
             elif filter == 'TEAM':
-                queryset = ReportTbl.objects.filter(type='TEAM')\
+                ids = ReportTypeTbl.objects.filter(type='TEAM').values_list('report_id', flat=True).distinct()
+                print(list(ids))
+                queryset = ReportTbl.objects.filter(pk__in=list(ids)) \
                     .filter(is_accepted=1).filter(is_submitted=1)
                 return queryset
             elif filter == 'CIRCLE':
-                queryset = ReportTbl.objects.filter(type='CIRCLE')\
+                ids = ReportTypeTbl.objects.filter(type='CIRCLE').values_list('report_id', flat=True).distinct()
+                print(list(ids))
+                queryset = ReportTbl.objects.filter(pk__in=list(ids)) \
                     .filter(is_accepted=1).filter(is_submitted=1)
                 return queryset
             else:
