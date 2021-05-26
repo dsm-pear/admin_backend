@@ -115,10 +115,20 @@ class RequestSerializer(serializers.ModelSerializer):
 
 
 class DenySerializer(serializers.ModelSerializer):
+    is_submitted = serializers.SerializerMethodField()
+
+    def get_is_submitted(self, obj):
+        if obj.is_accepted == 1:
+            return 1
+        elif obj.is_accepted == 0:
+            report = ReportTbl.objects.get(id=obj.id)
+            report.is_submitted = 0
+            report.save()
+            return 0
 
     class Meta:
         model = ReportTbl
-        fields = ('is_accepted', 'comment')
+        fields = ('is_accepted', 'comment', 'is_submitted')
 
 
 class CommentSerializer(serializers.ModelSerializer):
